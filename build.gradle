@@ -1,0 +1,50 @@
+plugins {
+	id 'java'
+	id 'application'
+	id 'idea'
+	id 'com.diffplug.gradle.spotless' version '3.25.0'
+}
+
+version = '0.0.1'
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+repositories {
+	jcenter()
+}
+
+sourceSets {
+	extraLibs {
+	}
+}
+
+dependencies {
+	implementation 'io.github.classgraph:classgraph:4.8.52'
+	implementation 'com.google.guava:guava:28.1-jre'
+
+	extraLibsCompile 'io.grpc:grpc-netty-shaded:1.24.1'
+}
+
+application {
+	mainClassName = 'com.devinrsmith.classgraph.StartupSpeed'
+}
+
+distributions {
+	main {
+		contents {
+			into('extra-libs') {
+				from(project.configurations.extraLibsRuntime)
+			}
+		}
+	}
+}
+
+spotless {
+	java {
+		googleJavaFormat()
+	}
+	groovyGradle {
+		greclipse()
+	}
+}
